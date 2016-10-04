@@ -1,0 +1,12 @@
+3.4.22 (Selective Steve)
+da39a3ee5e6b4b0d3255bfef95601890afd80709
+o:Sass::Tree::RootNode:@children[ :@filename0:
+@options{ :@templateI" :ET:
+@linei:@source_rangeo:Sass::Source::Range	:@start_poso:Sass::Source::Position;i:@offseti:
+@end_poso;;i;i:
+@fileI"src/css/font.scss:
+encoding"IBM866:@importero: Sass::Importers::Filesystem:
+@rootI"C:/Users/Admin/node/grunt;
+T:@real_rootI"C:/Users/Admin/node/grunt;
+T:@same_name_warningso:Set:
+@hash{ 
