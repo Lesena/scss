@@ -22,7 +22,19 @@ var mapValues = require('lodash.mapvalues');
     concat: {
         main: { src: ['src/js/mysimpleslider.js', 'src/js/slider.js'], dest: 'src/js/scripts.js' }
     },
-
+     imagemin: {
+      options: {
+        cache: false
+      },
+      dist: {
+        files: [{
+          expand: true,
+          cwd: 'src/img',
+          src: ['**/*.{png,jpg,gif}'],
+          dest: 'src/img/'
+        }]
+      }
+    },
     // Сжатие общего JS файла
     uglify: {
        options: {
@@ -53,7 +65,13 @@ var mapValues = require('lodash.mapvalues');
         }]
       }
     },
-    
+	'jsmin-sourcemap': {
+      all: {
+        src: ['src/js/scripts.js'],
+        dest: 'src/js/scripts.jsmin-grunt.js',
+        destMap: 'src/js/scripts.jsmin-grunt.js.map'
+      }
+    },
     // CSS Min
     cssmin: {
          minify: {
@@ -72,6 +90,7 @@ var mapValues = require('lodash.mapvalues');
     }]
   }
         },
+		
      //этот таск из серии postcss, те теперь не нужно будет сразу писать префиксы в css
         //autoprefixer сделает это сам, инфу берет с caniuse.com
         autoprefixer: {
@@ -82,8 +101,12 @@ var mapValues = require('lodash.mapvalues');
             },
     watch: {
         options: {
-        livereload: true,
-      },
+    livereload: true
+  },
+   gruntfile: {
+    files: ['Gruntfile.js'],
+    tasks: ['src:dev']
+  },
       scripts: {
             files: ['js/*.js'],
             tasks: ['concat', 'uglify'],
@@ -107,6 +130,22 @@ var mapValues = require('lodash.mapvalues');
                 //какие таски надо выполнить при изменении файлов .less
                 tasks: ['less', 'autoprefixer']
             }
+    },
+	connect: {
+      server: {
+        options: {
+          port: 3000,
+                    livereload: 35729,
+                    hostname: 'localhost',
+                    base: ['src']
+        },
+                livereload: {
+                    options: {
+                        open:true,
+                        base: ['src']
+                    }
+                }
+      }
     }
 
 
@@ -117,12 +156,15 @@ var mapValues = require('lodash.mapvalues');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
+   grunt.loadNpmTasks('grunt-jsmin-sourcemap');
    //указываем названия модулей необходимых для работы
     grunt.loadNpmTasks('grunt-autoprefixer');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-imagemin');
+  grunt.loadNpmTasks('grunt-connect');
   grunt.loadNpmTasks('grunt-lodash');
   // Эти задания будут выполнятся сразу же когда вы в консоли напечатание grunt, и нажмете Enter
-  grunt.registerTask('default', ['concat', 'uglify', 'sass','cssmin','autoprefixer','less']);
-};
+  grunt.registerTask('default', ['concat', 'jsmin-sourcemap', 'uglify', 'sass','cssmin','autoprefixer','less']);
+ grunt.registerTask('dev',['connect','concat','sass','uglify','imagemin','watch']);
+  };
